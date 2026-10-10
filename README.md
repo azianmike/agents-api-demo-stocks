@@ -27,7 +27,26 @@ OPENAI_API_KEY=your-api-key
 Progress appears in the terminal. Each run creates a new folder under `outputs/`
 containing `earnings.html`, `research.json`, `earnings-briefing.zip`, and `run.json`.
 Open the HTML directly, or extract the ZIP to access the source reports too.
-The key stays local; only the research prompt is sent to the hosted environment.
+The key is read from `.env` or the environment; it is never included in the research prompt.
+
+Connection drops and read timeouts automatically reconnect to the same session.
+The script checks the saved turn first, so it can also recover a completion that
+happened while disconnected. Downloads and log exports retry transient failures
+with delays of 2, 4, 8, 16, 30, and 30 seconds before stopping. Partial downloads
+never replace finished files. Authentication errors, failed/cancelled turns, and
+requests for user action stop recovery.
+
+If the script closes or retries run out, reconnect using its saved checkpoint:
+
+```sh
+.venv/bin/python earnings.py --resume outputs/YOUR_RUN/run.json
+```
+
+This reuses the output folder and appends live events and logs. Recovery does not
+submit a new prompt or start another research turn. The existing remote run can
+still incur charges while it continues. If connection loss happens before a
+session ID is received, the script stops; inspect the Agents dashboard before
+starting again. Session creation is never automatically retried.
 
 To retry a download without paying for another research run, use the IDs saved
 in `run.json`:
@@ -42,8 +61,7 @@ Python 3.9 installs an older SDK without this interface; use Python 3.10 or newe
 when creating the virtual environment. Your project needs Agents
 API access and a key with `api.agents.read`, `api.agents.write`, and
 `api.responses.write` permissions. A run uses billable model and tool resources.
-If the stream disconnects, inspect the saved session before starting another run;
-disconnecting the client does not necessarily cancel remote work.
+Disconnecting or stopping the client does not necessarily cancel remote work.
 
 ## Logs and traces
 
@@ -51,7 +69,7 @@ Each run saves logs alongside its outputs:
 
 - `run.log`: timestamped progress, download messages, and errors, also shown in the terminal.
 - `events.jsonl`: live API events, saved as they arrive, including received events before a failure or disconnect.
-- `items.jsonl`: recorded root-agent messages and tool activity, exported after the download attempt.
+- `items.jsonl`: saved root-agent messages and tool activity, including work missed during a disconnect; exported on completion or failure when a session ID is available.
 - `traces.jsonl`: available session trace records, with OTLP data in each record's `otlp` field.
 
 Tracing is enabled by default. Open [Logs → Agents](https://platform.openai.com/logs?api=agents)
@@ -84,3 +102,4 @@ References: [Agents API quickstart](https://developers.openai.com/api/docs/guide
 ```
 
 Tests use mocked HTTP responses and do not call OpenAI or spend API credits.
+Run them only when explicitly requested; see `AGENTS.md`.
