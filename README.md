@@ -57,6 +57,7 @@ in `run.json`:
 
 The script uses the official OpenAI Python SDK's `client.beta.agents` interface.
 The SDK handles stream parsing, authentication, and artifact pagination.
+Each new run requests the OpenAI-hosted `small` container preset (1 vCPU, 1 GB RAM).
 Python 3.9 installs an older SDK without this interface; use Python 3.10 or newer
 when creating the virtual environment. Your project needs Agents
 API access and a key with `api.agents.read`, `api.agents.write`, and

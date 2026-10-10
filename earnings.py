@@ -119,7 +119,8 @@ def run_agent(client, output):
                 "instructions": "Research carefully, create the requested files, and verify them.",
                 "tools": [{"type": "web_search", "mode": "live"}],
             },
-            environment={"type": "openai_hosted", "network": {"access": "enabled"}},
+            environment={"type": "openai_hosted", "container_size": "small",
+                         "network": {"access": "enabled"}},
             input=prompt,
             stream=True,
         ) as stream:

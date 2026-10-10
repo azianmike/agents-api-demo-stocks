@@ -32,28 +32,26 @@ report dates and periods, metrics, findings, sources, relative report paths, and
 
 3. DESIGN AND DELIVER
 Build /workspace/outputs/earnings.html from the JSON. Make it responsive, accessible,
-and usable offline, with embedded data, CSS, SVG, and JavaScript, system fonts,
-and no external dependencies. Link citations and local reports.
+and usable offline, with system fonts, no external dependencies, and working citations
+and local report links.
 
-Design references:
-- FT Visual Vocabulary: chart clarity.
-  https://github.com/Financial-Times/chart-doctor/tree/main/visual-vocabulary
-- Bloomberg Billionaires Index: numeric hierarchy and compact comparisons.
-  https://www.bloomberg.com/billionaires/
-- Our World in Data: usability and source transparency.
-  https://ourworldindata.org/redesigning-our-interactive-data-visualizations
+Keep the main read concise: one takeaway, one comparison table, and one short summary
+per company covering its signal, watch item, and outlook. Avoid repeating metrics or
+conclusions. Assess and implement one prominent interactive chart when it reveals a
+useful pattern the table cannot. Use controls only to explore valid comparisons; label
+units and data bases. Omit redundant or misleading charts. Keep periods, actual or
+forecast status, caveats, and citations beside the relevant figures or claims.
 
-Start with the main takeaway and a chart comparing like-for-like metrics. Add one
-short section per company with report date, period, key results, opportunities,
-and risks. Label charts directly with units and sources; start bar charts at zero.
-Include a data table and keep essential information visible without hovering.
+Put detailed analysis, segment data, consensus checks, methods, and source lists in
+clearly labeled expandable sections. Use plain language, short headings, and a clear
+visual hierarchy. Use a warm white background, dark text, one accent per company,
+and readable spacing and numbers. Make tables and disclosures work on narrow screens
+and with a keyboard; avoid decorative effects and excessive cards.
 
-Use a warm white background, dark text, one accent per company, generous spacing,
-clear headings, and readable numbers. Keep copy short. Avoid excessive cards,
-gradients, 3D charts, and decorative animation.
-
-Check calculations, citations, charts, and offline behavior. Inspect desktop and
-mobile layouts if browser tools are available; note checks not performed.
+Check calculations, links, and document structure statically. Inspect desktop and
+mobile layouts when preview tools are available; state any checks not done. Do not run
+tests, earnings scripts, live API calls, or other billable checks without explicit
+user approval.
 
 Package HTML, JSON, and reports/ in /workspace/outputs/earnings-briefing.zip with
 working relative links. Keep HTML and JSON separately available. Return all three
